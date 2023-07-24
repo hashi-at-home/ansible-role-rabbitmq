@@ -1,0 +1,48 @@
+- name: Ensure Rabbit Group
+  group:
+    name: rabbit
+    state: present
+    system: false
+
+- name: Create rabbit user
+  user:
+    name: rabbit
+    groups: rabbit
+    append: true
+    shell: /bin/bash
+    state: present
+    create_home: true
+    generate_ssh_key: false
+
+- name: Ensure .ssh directory
+  file:
+    path: /home/rabbit/.ssh
+    state: directory
+    mode: 700
+    owner: rabbit
+    group: rabbit
+
+- name: Set private key
+  copy:
+    dest: "/home/rabbit/.ssh/{{ item.dest }}"
+    content: "{{ item.src }}"
+    backup: true
+    mode: 0444
+    owner: rabbit
+    group: rabbit
+  loop:
+    - src: "{{ rabbitmq_secret.data.data.ssh_private_key }}"
+      dest: id_rsa
+    - src: "{{ rabbitmq_secret.data.data.ssh_public_key }}"
+      dest: id_rsa.pub
+  no_log: true
+    
+- name: Set up authorized_key
+  authorized_key:
+    user: rabbit
+    key: "{{ rabbitmq_secret.data.data.ssh_public_key }}"
+    path: /home/rabbit/authorized_keys
+    manage_dir: false
+    state: present
+    exclusive: false
+    

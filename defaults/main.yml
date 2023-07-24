@@ -1,2 +1,14 @@
 ---
 # defaults file for ansible-role-template
+prerequisites:
+  debian:
+    - libssl-dev
+    - ncurses-dev
+erlang_repo_version: 2.0
+erlang_repo_deb_url: "https://packages.erlang-solutions.com/erlang-solutions_{{ erlang_repo_version}}_all.deb"
+erlang_package_pins: "erlang* esl-erlang"
+erlang_version: 25.2.3
+erlang_pin_priority: 501
+erlang_packages:
+  - erlang
+  - esl-erlang

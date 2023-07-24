@@ -1,2 +1,16 @@
 ---
 # tasks file for ansible-role-template
+# - name: Ensure prerequisites
+#   package:
+#     name: 
+- name: Lookup rabbit ssh key
+  delegate_to: localhost
+  become: false
+  run_once: true
+  community.hashi_vault.vault_kv2_get:
+    engine_mount_point: "{{ vault_mount }}"
+    path: "{{ rabbit_secret }}"
+  register: rabbitmq_secret
+
+- include_tasks: ssh.yml
+- include_tasks: install.yml
