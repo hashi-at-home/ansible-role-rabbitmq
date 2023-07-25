@@ -1,6 +1,7 @@
 ---
 - name: Test
-  hosts: localhost
-  connection: local
+  hosts: rabbitmq_nodes
+  connection: ssh
+  become: true
   roles:
-    - brucellino.template
+    - ansible-role-rabbitmq

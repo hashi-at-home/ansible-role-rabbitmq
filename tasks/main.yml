@@ -1,8 +1,4 @@
 ---
-# tasks file for ansible-role-template
-# - name: Ensure prerequisites
-#   package:
-#     name: 
 - name: Lookup rabbit ssh key
   delegate_to: localhost
   become: false
@@ -12,5 +8,7 @@
     path: "{{ rabbit_secret }}"
   register: rabbitmq_secret
 
-- include_tasks: ssh.yml
-- include_tasks: install.yml
+- name: Ensure user configs
+  ansible.builtin.include_tasks: ssh.yml
+- name: Install
+  ansible.builtin.include_tasks: install.yml

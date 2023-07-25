@@ -1,2 +1,4 @@
 ---
 # vars file for ansible-role-template
+vault_mount: hashiatho.me-v2
+rabbit_secret: infra/rabbitmq # pragma: allowlist secret

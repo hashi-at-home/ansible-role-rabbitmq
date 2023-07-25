@@ -1,11 +1,11 @@
 - name: Ensure Rabbit Group
-  group:
+  ansible.builtin.group:
     name: rabbit
     state: present
     system: false
 
 - name: Create rabbit user
-  user:
+  ansible.builtin.user:
     name: rabbit
     groups: rabbit
     append: true
@@ -15,19 +15,19 @@
     generate_ssh_key: false
 
 - name: Ensure .ssh directory
-  file:
+  ansible.builtin.file:
     path: /home/rabbit/.ssh
     state: directory
-    mode: 700
+    mode: "0700"
     owner: rabbit
     group: rabbit
 
 - name: Set private key
-  copy:
+  ansible.builtin.copy:
     dest: "/home/rabbit/.ssh/{{ item.dest }}"
     content: "{{ item.src }}"
     backup: true
-    mode: 0444
+    mode: "0444"
     owner: rabbit
     group: rabbit
   loop:
@@ -36,13 +36,12 @@
     - src: "{{ rabbitmq_secret.data.data.ssh_public_key }}"
       dest: id_rsa.pub
   no_log: true
-    
+
 - name: Set up authorized_key
-  authorized_key:
+  ansible.posix.authorized_key:
     user: rabbit
     key: "{{ rabbitmq_secret.data.data.ssh_public_key }}"
     path: /home/rabbit/authorized_keys
     manage_dir: false
     state: present
     exclusive: false
-    

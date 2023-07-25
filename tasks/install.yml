@@ -1,0 +1,47 @@
+---
+- name: Ensure Erlang repository
+  ansible.builtin.apt:
+    state: present
+    update_cache: true
+    install_recommends: false
+    deb: "{{ erlang_repo_deb_url }}"
+
+- name: Ensure Apt preferences dir
+  ansible.builtin.file:
+    path: /etc/apt/preferences.d
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+
+- name: Pin Erlang Version
+  ansible.builtin.template:
+    src: templates/etc/apt/preferences.d/erlang.j2
+    dest: /etc/apt/preferences.d/erlang
+    backup: true
+    mode: "0644"
+    owner: root
+    group: root
+
+- name: Ensure RabbitMQ server
+  ansible.builtin.package:
+    name: "{{ erlang_packages }}"
+    state: present
+    update_cache: true
+
+- name: Ensure erlang cookie dir
+  ansible.builtin.file:
+    path: /var/lib/rabbitmq
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Ensure Erlang cookie
+  ansible.builtin.copy:
+    dest: /var/lib/rabbitmq/.erlang.cookie
+    content: H@H
+    backup: true
+    mode: "0444"
+    owner: rabbitmq
+    group: rabbitmq
