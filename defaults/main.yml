@@ -11,4 +11,3 @@ erlang_version: 25.2.3
 erlang_pin_priority: 501
 erlang_packages:
   - erlang
-  - esl-erlang

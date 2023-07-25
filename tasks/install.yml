@@ -25,7 +25,7 @@
 
 - name: Ensure RabbitMQ server
   ansible.builtin.package:
-    name: "{{ erlang_packages }}"
+    name: rabbitmq-server
     state: present
     update_cache: true
 
