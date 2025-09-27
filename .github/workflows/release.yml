@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Ansible Lint
-        uses: ansible-community/ansible-lint-action@v6.17.0
+        uses: ansible/ansible-lint@v1.0.3
         with:
           path: test/playbook.yml
         env:
@@ -35,7 +35,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 'lts/*'
+          node-version: "lts/*"
       - name: add semantic release plugins
         run: |
           npm install -D '@semantic-release/changelog' \
